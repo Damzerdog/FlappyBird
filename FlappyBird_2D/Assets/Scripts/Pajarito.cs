@@ -23,7 +23,7 @@ public class Pajarito : MonoBehaviour
                 //Si se presiona el botón izquierdo del ratón, el pájaro salta
                 //Para ello le aplicamos una fuerza hacia arriba
                 //AL tener GRAVEDAD en el Rigidbody2D, el pájaro caerá, y para que suba aplicamos una fuerza hacia arriba afectando la velocidad del rigidbody con un vector de 2 dimensiones (0,3.5f)
-                rigidbodyPajaro.linearVelocity = new Vector2(0,3.5f);
+                rigidbodyPajaro.linearVelocity = new Vector2(0,2.5f);
             }
         }
         else{
