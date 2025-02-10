@@ -3,6 +3,8 @@ using UnityEngine;
 public class Tuberia : MonoBehaviour
 {
     public Pajarito scriptPajaro;
+    public Transform transformPajaro;
+    public bool HaSumadoPunto = false;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -23,7 +25,17 @@ public class Tuberia : MonoBehaviour
                 //0.5 posisicion mas baja
                 //0.75 posicion mas alta
                 transform.position = new Vector3(3.5f,Random.Range(-0.5f,0.75f),transform.position.z);
+                //HaSumadoPunto = false;
             }
+        }
+        if(transformPajaro.position.x > transform.position.x){
+            Debug.Log(transformPajaro.transform.position.x);
+            Debug.Log("Pajaro: " + transformPajaro.position.x + "\n Tuberia: " + transform.position.x);
+        }
+        //Durante cada paso de frame, vamos a verificar si el pajadito ha cruzado la tuberia
+        if(transformPajaro.position.x > transform.position.x && HaSumadoPunto == false){
+            scriptPajaro.IncrementarPuntuacion();
+            HaSumadoPunto = true;
         }
         
     }
