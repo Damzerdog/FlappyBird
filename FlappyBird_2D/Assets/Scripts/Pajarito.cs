@@ -42,6 +42,7 @@ public class Pajarito : MonoBehaviour
     
     //Metodo de la clase MOnoBehaviour que se ejecuta cuando el objeto colisiona con otro objeto
     void OnCollisionEnter2D(Collision2D collision){
+        Debug.Log("SaLV Si estoy chocando");
         if(estaMuerto == false){
             //Si el pájaro colisiona con cualquier objeto, se establece que el pájaro está muerto
             estaMuerto = true;
