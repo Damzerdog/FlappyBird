@@ -10,7 +10,9 @@ public class Pajarito : MonoBehaviour
     //Referencia a otro script
     public ControladorCanvas controladorCanvas;
     public int puntuacion = 0;
-    public TextMeshProUGUI textoPuntuacion;
+    public TextMeshProUGUI textoPuntuacion, textoPuntuacionMuerte;
+    public TextMeshProUGUI textoPuntuacionMaxima;
+    public GameObject medallaBronce, medallaPlata, medallaOro;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -29,6 +31,9 @@ public class Pajarito : MonoBehaviour
                 //Para ello le aplicamos una fuerza hacia arriba
                 //AL tener GRAVEDAD en el Rigidbody2D, el pájaro caerá, y para que suba aplicamos una fuerza hacia arriba afectando la velocidad del rigidbody con un vector de 2 dimensiones (0,3.5f)
                 rigidbodyPajaro.linearVelocity = new Vector2(0,2.5f);
+                //Rotamos el transform(pajaro) en el eje Z 30 grados
+                //transform.rotation = Quaternion.Euler(0,0,30);
+                rigidbodyPajaro.SetRotation(30);
             }
         }
         else{
@@ -38,6 +43,15 @@ public class Pajarito : MonoBehaviour
         }
         //Para evitar errores, convertimos la puntuación a string
         textoPuntuacion.text = puntuacion.ToString();
+        if(rigidbodyPajaro.linearVelocity.y < 0){
+            //Si la velocidad del pájaro es menor a 0, rotamos el pájaro en el eje Z -45 grados
+            //transform.rotation = Quaternion.Euler(0,0,-45);
+            //Al ser un gameobject con rigid body, se recomienda usar el metodo SetRotation y no tocar el Transform
+            //Ocupamos DeltaTime, porque esta dentro del UPDATE, dependiendo el refresh de cada equipo en FPS
+            rigidbodyPajaro.SetRotation(rigidbodyPajaro.rotation - 280 * Time.deltaTime);
+            //Limitamos la rotacion min -90 y max 30
+            rigidbodyPajaro.SetRotation(Mathf.Clamp(rigidbodyPajaro.rotation, -90, 30));
+        }
     }
     
     //Metodo de la clase MOnoBehaviour que se ejecuta cuando el objeto colisiona con otro objeto
@@ -50,11 +64,31 @@ public class Pajarito : MonoBehaviour
             //Una vez que el pájaro está muerto, se muestra el menú de muerte con un delay de 1 seg
             controladorCanvas.Invoke("MostrarMenuMuerte", 1f);
             //controladorCanvas.MostrarMenuMuerte();
+            textoPuntuacionMuerte.text = puntuacion.ToString();
+            GuardarPuntuacionMaxima();
+            if(puntuacion > 10){
+                medallaOro.SetActive(true);
+            }else if(puntuacion > 5){
+                medallaPlata.SetActive(true);
+            }else if(puntuacion > 1){
+                medallaBronce.SetActive(true);
+            }
         }
     }
 
     public void IncrementarPuntuacion(){
         puntuacion++;
         Debug.Log("Puntuación: " + puntuacion);
+    }
+    public void GuardarPuntuacionMaxima(){
+        //Si la puntuación actual es mayor a la puntuación máxima guardada en el PlayerPrefs
+        //Si puntuacionmaxima es nula va tomar el valor de 0
+        if(puntuacion > PlayerPrefs.GetInt("PuntuacionMaxima",0)){
+            //Se guarda la puntuación máxima en el PlayerPrefs
+            //PlayerPrefs es una clase que permite guardar datos en la memoria del dispositivo
+            PlayerPrefs.SetInt("PuntuacionMaxima", puntuacion);
+        }
+            textoPuntuacionMaxima.text = PlayerPrefs.GetInt("PuntuacionMaxima").ToString();
+        
     }
 }

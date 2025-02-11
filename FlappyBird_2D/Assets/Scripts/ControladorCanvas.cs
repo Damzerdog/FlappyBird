@@ -6,6 +6,8 @@ public class ControladorCanvas : MonoBehaviour
     public GameObject menuPrincipal;
     public GameObject Pajadito;
     public GameObject menuMuerte;
+    public GameObject menuInGame;
+    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -20,6 +22,7 @@ public class ControladorCanvas : MonoBehaviour
     public void EsconderMenuPrincipal(){
         menuPrincipal.SetActive(false);
         Pajadito.SetActive(true);
+        menuInGame.SetActive(true);
     }
     public void ReiniciarJuego(){
         UnityEngine.SceneManagement.SceneManager.LoadScene(0);
